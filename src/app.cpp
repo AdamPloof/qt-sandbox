@@ -1,23 +1,31 @@
 #include "app.h"
 #include "ui_app.h"
 #include "forms/add_expense_form.h"
+#include "service/dao.h"
 
-App::App(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::App)
+App::App(std::shared_ptr<DAO> dao, QWidget *parent)
+    : QMainWindow(parent),
+    m_dao(dao),
+    ui(new Ui::App)
 {
     ui->setupUi(this);
-    addExpenseForm = new AddExpenseForm(this);
-    addExpenseForm->setWindowFlag(Qt::Window);
+    m_addExpenseForm = new AddExpenseForm(this);
+    m_addExpenseForm->setWindowFlag(Qt::Window);
 }
 
 App::~App()
 {
     delete ui;
-    delete addExpenseForm;
+    delete m_addExpenseForm;
 }
 
+void App::run() {
+    m_dao->openDb();
+}
+
+// ## SLOTS ##
+
 void App::on_addBtn_clicked() {
-    addExpenseForm->show();
+    m_addExpenseForm->show();
 }
 

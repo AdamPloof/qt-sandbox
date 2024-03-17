@@ -24,7 +24,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         app.h app.cpp app.ui
         forms/add_expense_form.h forms/add_expense_form.cpp forms/add_expense_form.ui
+        service/dao.h service/dao.cpp
+        entity/entity_interface.h entity/expense.h entity/expense.cpp
     )
+
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET QtModelViewSandbox APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
