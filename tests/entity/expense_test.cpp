@@ -2,7 +2,7 @@
 #include <QHash>
 #include <QString>
 #include <QVariant>
-#include "../src/entity/expense.h"
+#include "../../src/entity/expense.h"
 
 TEST(ExpenseTest, DataIsSet) {
     // EXPECT_EQ(1, 1);
@@ -12,7 +12,7 @@ TEST(ExpenseTest, DataIsSet) {
     expense.setData("amount", 4.2);
 
     QHash<QString, QVariant> data = expense.getData();
-    EXPECT_EQ(42, data["id"]);
+    EXPECT_EQ(42, data["id"].toInt());
     EXPECT_EQ("Forty two", data["description"].toString().toStdString());
-    EXPECT_EQ(4.2, data["amount"]);
+    EXPECT_FLOAT_EQ(4.2, data["amount"].toFloat());
 }

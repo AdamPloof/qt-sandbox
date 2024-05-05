@@ -8,13 +8,13 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(
-  base_test
-  base_test.cpp
+  expense_test
+  entity/expense_test.cpp
   ${CMAKE_SOURCE_DIR}/src/entity/expense.h
   ${CMAKE_SOURCE_DIR}/src/entity/expense.cpp
 )
 target_link_libraries(
-  base_test
+  expense_test
   GTest::gtest_main
   Qt${QT_VERSION_MAJOR}::Widgets
   Qt6::Core
@@ -22,4 +22,4 @@ target_link_libraries(
 )
 
 include(GoogleTest)
-gtest_discover_tests(base_test)
+gtest_discover_tests(expense_test)

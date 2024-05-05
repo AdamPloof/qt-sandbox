@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <memory>
 
+class ExpenseModel;
+class QTableView;
 class AddExpenseForm;
 class DAO;
 
@@ -27,6 +29,9 @@ private:
     Ui::App *ui;
     std::shared_ptr<DAO> m_dao;
     AddExpenseForm *m_addExpenseForm;
+    void formatTable(QTableView* tbl);
+
+    ExpenseModel* m_expenseModel;
 };
 
 #endif // APP_H

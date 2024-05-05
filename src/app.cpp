@@ -1,7 +1,10 @@
+#include <QTableView>
+
 #include "app.h"
 #include "ui_app.h"
 #include "forms/add_expense_form.h"
 #include "service/dao.h"
+#include "model/expense_model.h"
 
 App::App(std::shared_ptr<DAO> dao, QWidget *parent)
     : QMainWindow(parent),
@@ -11,6 +14,7 @@ App::App(std::shared_ptr<DAO> dao, QWidget *parent)
     ui->setupUi(this);
     m_addExpenseForm = new AddExpenseForm(this);
     m_addExpenseForm->setWindowFlag(Qt::Window);
+    m_expenseModel = new ExpenseModel();
 }
 
 App::~App()
@@ -20,7 +24,14 @@ App::~App()
 }
 
 void App::run() {
+    ui->expenseTbl->setModel(m_expenseModel);
+    formatTable(ui->expenseTbl);
     m_dao->openDb();
+}
+
+void App::formatTable(QTableView* tbl) {
+    tbl->verticalHeader()->setVisible(false);
+    tbl->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 // ## SLOTS ##
