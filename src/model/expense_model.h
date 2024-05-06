@@ -2,6 +2,7 @@
 #define EXPENSE_MODEL_H
 
 #include <QAbstractTableModel>
+#include <QSqlDatabase>
 #include <QString>
 #include <QHash>
 #include <memory>
@@ -13,8 +14,12 @@ class ExpenseModel : public QAbstractTableModel {
 
     public:
         explicit ExpenseModel(QObject *parent = nullptr);
-        // ~ExpenseModel();
+        ~ExpenseModel();
 
+        static QSqlDatabase& openDb();
+        static void closeDb();
+
+        void load();
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

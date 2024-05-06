@@ -6,9 +6,9 @@
 #include "service/dao.h"
 #include "model/expense_model.h"
 
-App::App(std::shared_ptr<DAO> dao, QWidget *parent)
+App::App(QWidget *parent)
     : QMainWindow(parent),
-    m_dao(dao),
+    // m_dao(dao),
     ui(new Ui::App)
 {
     ui->setupUi(this);
@@ -26,7 +26,7 @@ App::~App()
 void App::run() {
     ui->expenseTbl->setModel(m_expenseModel);
     formatTable(ui->expenseTbl);
-    m_dao->openDb();
+    // m_dao->openDb();
 }
 
 void App::formatTable(QTableView* tbl) {

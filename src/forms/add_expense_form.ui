@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>191</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,38 +18,38 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
+       <item alignment="Qt::AlignTop">
         <widget class="QLabel" name="descriptionLbl">
          <property name="text">
           <string>Description</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item alignment="Qt::AlignTop">
         <widget class="QLineEdit" name="descriptionInput"/>
        </item>
-       <item>
+       <item alignment="Qt::AlignTop">
         <widget class="QLabel" name="amountLbl">
          <property name="text">
           <string>Amount</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QSpinBox" name="amountInput"/>
+       <item alignment="Qt::AlignTop">
+        <widget class="QDoubleSpinBox" name="amountInput"/>
        </item>
       </layout>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
+       <item alignment="Qt::AlignBottom">
         <widget class="QPushButton" name="cancelBtn">
          <property name="text">
           <string>Cancel</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item alignment="Qt::AlignBottom">
         <widget class="QPushButton" name="addBtn">
          <property name="text">
           <string>Add</string>

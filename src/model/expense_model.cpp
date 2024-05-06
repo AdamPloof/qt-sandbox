@@ -1,4 +1,7 @@
 #include <QList>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDebug>
 #include <vector>
 
 #include "expense_model.h"
@@ -6,24 +9,38 @@
 #include "../entity/entity_interface.h"
 
 ExpenseModel::ExpenseModel(QObject *parent) {
-    std::shared_ptr<Expense> exp1 = std::make_shared<Expense>(Expense());
-    exp1->setData("id", 1);
-    exp1->setData("description", "Food");
-    exp1->setData("amount", 42.00);
+    ExpenseModel::openDb();
+    load();
+}
 
-    std::shared_ptr<Expense> exp2 = std::make_shared<Expense>(Expense());
-    exp2->setData("id", 2);
-    exp2->setData("description", "House");
-    exp2->setData("amount", 105.00);
+ExpenseModel::~ExpenseModel() {
+    ExpenseModel::closeDb();
+}
 
-    std::shared_ptr<Expense> exp3 = std::make_shared<Expense>(Expense());
-    exp3->setData("id", 3);
-    exp3->setData("description", "Heat");
-    exp3->setData("amount", 99.50);
+QSqlDatabase& ExpenseModel::openDb() {
+    static QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("data.db");
 
-    m_expenses.insert(exp1->getId(), exp1);
-    m_expenses.insert(exp2->getId(), exp2);
-    m_expenses.insert(exp3->getId(), exp3);
+    if (!db.open()) {
+        qDebug() << "DB error: " << db.lastError().text() << "\n";
+    }
+
+    return db;
+}
+
+void ExpenseModel::closeDb() {
+    QSqlDatabase::database().close();
+}
+
+void ExpenseModel::load() {
+    QSqlQuery q = QSqlQuery("SELECT id, description, amount FROM expense");
+    while (q.next()) {
+        std::shared_ptr<Expense> exp = std::make_shared<Expense>(Expense());
+        exp->setData("id", q.value(0).toInt());
+        exp->setData("description", q.value(1).toString());
+        exp->setData("amount", q.value(2).toFloat());
+        m_expenses.insert(exp->getId(), exp);
+    }
 }
 
 int ExpenseModel::rowCount(const QModelIndex &parent) const {

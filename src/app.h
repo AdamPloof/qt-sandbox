@@ -18,7 +18,7 @@ class App : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit App(std::shared_ptr<DAO> dao, QWidget *parent = nullptr);
+    explicit App(QWidget *parent = nullptr);
     ~App();
     void run();
 
@@ -27,7 +27,7 @@ private slots:
 
 private:
     Ui::App *ui;
-    std::shared_ptr<DAO> m_dao;
+    // std::shared_ptr<DAO> m_dao;
     AddExpenseForm *m_addExpenseForm;
     void formatTable(QTableView* tbl);
 
