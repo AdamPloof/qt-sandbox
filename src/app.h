@@ -7,7 +7,7 @@
 class ExpenseModel;
 class QTableView;
 class AddExpenseForm;
-class DAO;
+class EntityManager;
 
 namespace Ui {
     class App;
@@ -32,6 +32,7 @@ private:
     void formatTable(QTableView* tbl);
 
     ExpenseModel* m_expenseModel;
+    std::shared_ptr<EntityManager> m_entityManager;
 };
 
 #endif // APP_H

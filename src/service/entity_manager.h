@@ -10,14 +10,16 @@ class QSqlDatabase;
 class QString;
 class ModelInterface;
 
-class DAO {
+class EntityManager {
 
 public:
-    DAO();
-    ~DAO();
+    EntityManager();
+    ~EntityManager();
 
     static QSqlDatabase& openDb();
     static void closeDb();
+
+    bool isReady();
 };
 
 #endif // DAO_H

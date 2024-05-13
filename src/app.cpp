@@ -1,9 +1,10 @@
 #include <QTableView>
+#include <QSqlDatabase>
 
 #include "app.h"
 #include "ui_app.h"
 #include "forms/add_expense_form.h"
-#include "service/dao.h"
+#include "service/entity_manager.h"
 #include "model/expense_model.h"
 
 App::App(QWidget *parent)
@@ -14,7 +15,8 @@ App::App(QWidget *parent)
     ui->setupUi(this);
     m_addExpenseForm = new AddExpenseForm(this);
     m_addExpenseForm->setWindowFlag(Qt::Window);
-    m_expenseModel = new ExpenseModel();
+    m_entityManager = std::make_shared<EntityManager>(EntityManager());
+    m_expenseModel = new ExpenseModel(m_entityManager);
 }
 
 App::~App()
@@ -24,9 +26,14 @@ App::~App()
 }
 
 void App::run() {
+    QSqlDatabase db = m_entityManager->openDb();
+    if (!db.isOpen()) {
+        // TODO: exit early with error
+    }
+
+    m_expenseModel->load();
     ui->expenseTbl->setModel(m_expenseModel);
     formatTable(ui->expenseTbl);
-    // m_dao->openDb();
 }
 
 void App::formatTable(QTableView* tbl) {

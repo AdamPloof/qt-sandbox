@@ -6,15 +6,15 @@
 #include <sstream>
 #include <cstddef>
 
-#include "dao.h"
+#include "entity_manager.h"
 
-DAO::DAO() {}
+EntityManager::EntityManager() {}
 
-DAO::~DAO() {
-    closeDb();
+EntityManager::~EntityManager() {
+    EntityManager::closeDb();
 }
 
-QSqlDatabase& DAO::openDb() {
+QSqlDatabase& EntityManager::openDb() {
     static QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("data.db");
 
@@ -25,6 +25,12 @@ QSqlDatabase& DAO::openDb() {
     return db;
 }
 
-void DAO::closeDb() {
+void EntityManager::closeDb() {
     QSqlDatabase::database().close();
+}
+
+bool EntityManager::isReady() {
+    QSqlDatabase db = QSqlDatabase::database();
+
+    return db.isOpen();
 }

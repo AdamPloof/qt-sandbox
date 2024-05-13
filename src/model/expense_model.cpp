@@ -5,32 +5,20 @@
 #include <vector>
 
 #include "expense_model.h"
+#include "../service/entity_manager.h"
 #include "../entity/expense.h"
 #include "../entity/entity_interface.h"
 
-ExpenseModel::ExpenseModel(QObject *parent) {
-    ExpenseModel::openDb();
-    load();
+ExpenseModel::ExpenseModel(
+    std::shared_ptr<EntityManager> em,
+    QObject *parent
+) : m_entityManger(em) {
+
 }
 
-ExpenseModel::~ExpenseModel() {
-    ExpenseModel::closeDb();
-}
-
-QSqlDatabase& ExpenseModel::openDb() {
-    static QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("data.db");
-
-    if (!db.open()) {
-        qDebug() << "DB error: " << db.lastError().text() << "\n";
-    }
-
-    return db;
-}
-
-void ExpenseModel::closeDb() {
-    QSqlDatabase::database().close();
-}
+// ExpenseModel::~ExpenseModel() {
+    
+// }
 
 void ExpenseModel::load() {
     QSqlQuery q = QSqlQuery("SELECT id, description, amount FROM expense");

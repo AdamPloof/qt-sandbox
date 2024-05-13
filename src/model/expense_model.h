@@ -8,16 +8,17 @@
 #include <memory>
 
 class EntityInterface;
+class EntityManager;
 
 class ExpenseModel : public QAbstractTableModel {
     Q_OBJECT
 
     public:
-        explicit ExpenseModel(QObject *parent = nullptr);
-        ~ExpenseModel();
-
-        static QSqlDatabase& openDb();
-        static void closeDb();
+        explicit ExpenseModel(
+            std::shared_ptr<EntityManager> em,
+            QObject *parent = nullptr
+        );
+        // ~ExpenseModel();
 
         void load();
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -30,6 +31,7 @@ class ExpenseModel : public QAbstractTableModel {
 
     private:
         QHash<int, std::shared_ptr<EntityInterface>> m_expenses;
+        std::shared_ptr<EntityManager> m_entityManger;
 };
 
 #endif // EXPENSE_MODEL_H
