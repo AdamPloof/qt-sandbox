@@ -12,7 +12,7 @@
 ExpenseModel::ExpenseModel(
     std::shared_ptr<EntityManager> em,
     QObject *parent
-) : m_entityManger(em) {
+) : m_entityManager(em) {
 
 }
 
@@ -28,7 +28,11 @@ void ExpenseModel::load() {
         exp->setData("description", q.value(1).toString());
         exp->setData("amount", q.value(2).toFloat());
         m_expenses.insert(exp->getId(), exp);
+
+        qDebug() << "Load item: " << q.value(0).toString();
     }
+
+    qDebug() << "Expense count: " << m_expenses.count();
 }
 
 int ExpenseModel::rowCount(const QModelIndex &parent) const {
@@ -62,6 +66,9 @@ QVariant ExpenseModel::headerData(int section, Qt::Orientation orientation, int 
 Qt::ItemFlags ExpenseModel::flags(const QModelIndex &index) const {
     if (!index.isValid()) {
         return Qt::ItemIsEnabled;
+    } else if (index.column() == 0) {
+        // ID is always column 0 and should be read-only
+        return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable;
     }
 
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
@@ -73,6 +80,7 @@ bool ExpenseModel::setData(const QModelIndex &index, const QVariant &value, int 
         int id = keys[index.row()];
         QString field = Expense::fields.at(index.column());
         m_expenses[id]->setData(field, value);
+        m_entityManager->update(m_expenses[id]);
         
         emit dataChanged(index, index, {role});
 

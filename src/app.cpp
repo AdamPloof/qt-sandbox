@@ -39,6 +39,7 @@ void App::run() {
 void App::formatTable(QTableView* tbl) {
     tbl->verticalHeader()->setVisible(false);
     tbl->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    tbl->setColumnHidden(0, true); // hide index col
 }
 
 // ## SLOTS ##

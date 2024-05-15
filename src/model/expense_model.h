@@ -31,7 +31,7 @@ class ExpenseModel : public QAbstractTableModel {
 
     private:
         QHash<int, std::shared_ptr<EntityInterface>> m_expenses;
-        std::shared_ptr<EntityManager> m_entityManger;
+        std::shared_ptr<EntityManager> m_entityManager;
 };
 
 #endif // EXPENSE_MODEL_H
