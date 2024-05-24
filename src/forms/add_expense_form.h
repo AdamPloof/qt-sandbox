@@ -2,10 +2,13 @@
 #define ADD_EXPENSE_FORM_H
 
 #include <QWidget>
+#include <memory>
 
 namespace Ui {
     class AddExpenseForm;
 }
+
+class EntityInterface;
 
 class AddExpenseForm : public QWidget
 {
@@ -15,10 +18,16 @@ public:
     explicit AddExpenseForm(QWidget *parent = nullptr);
     ~AddExpenseForm();
 
+signals:
+    void submitExpense(std::shared_ptr<EntityInterface> expense);
+
 private slots:
     void on_cancelBtn_clicked();
+    void on_addBtn_clicked();
 
 private:
+    bool isValid();
+
     Ui::AddExpenseForm *ui;
 };
 

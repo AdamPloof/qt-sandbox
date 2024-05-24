@@ -17,6 +17,7 @@ App::App(QWidget *parent)
     m_addExpenseForm->setWindowFlag(Qt::Window);
     m_entityManager = std::make_shared<EntityManager>(EntityManager());
     m_expenseModel = new ExpenseModel(m_entityManager);
+    connectForms();
 }
 
 App::~App()
@@ -40,6 +41,15 @@ void App::formatTable(QTableView* tbl) {
     tbl->verticalHeader()->setVisible(false);
     tbl->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     tbl->setColumnHidden(0, true); // hide index col
+}
+
+void App::connectForms() {
+    QObject::connect(
+        m_addExpenseForm,
+        &AddExpenseForm::submitExpense,
+        m_expenseModel,
+        &ExpenseModel::addExpense
+    );
 }
 
 // ## SLOTS ##

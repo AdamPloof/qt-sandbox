@@ -4,7 +4,7 @@
 #include <QAbstractTableModel>
 #include <QSqlDatabase>
 #include <QString>
-#include <QHash>
+#include <QList>
 #include <memory>
 
 class EntityInterface;
@@ -27,10 +27,13 @@ class ExpenseModel : public QAbstractTableModel {
         QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
         Qt::ItemFlags flags(const QModelIndex &index) const override;
         bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-        // void addRow(std::shared_ptr<ModelInterface> row) override;
+        bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+
+    public slots:
+        void addExpense(std::shared_ptr<EntityInterface> entity);
 
     private:
-        QHash<int, std::shared_ptr<EntityInterface>> m_expenses;
+        QList<std::shared_ptr<EntityInterface>> m_expenses;
         std::shared_ptr<EntityManager> m_entityManager;
 };
 

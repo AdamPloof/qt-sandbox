@@ -36,7 +36,11 @@
         </widget>
        </item>
        <item alignment="Qt::AlignTop">
-        <widget class="QDoubleSpinBox" name="amountInput"/>
+        <widget class="QDoubleSpinBox" name="amountInput">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

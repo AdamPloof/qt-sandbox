@@ -27,7 +27,7 @@ void ExpenseModel::load() {
         exp->setData("id", q.value(0).toInt());
         exp->setData("description", q.value(1).toString());
         exp->setData("amount", q.value(2).toFloat());
-        m_expenses.insert(exp->getId(), exp);
+        m_expenses.push_back(exp);
 
         qDebug() << "Load item: " << q.value(0).toString();
     }
@@ -45,11 +45,9 @@ int ExpenseModel::columnCount(const QModelIndex &parent) const {
 
 QVariant ExpenseModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole && !m_expenses.isEmpty()) {
-        QList keys = m_expenses.keys();
-        int id = keys[index.row()];
         QString field = Expense::fields.at(index.column());
 
-        return m_expenses[id]->getData(field);
+        return m_expenses[index.row()]->getData(field);
     }
 
     return QVariant();
@@ -76,11 +74,9 @@ Qt::ItemFlags ExpenseModel::flags(const QModelIndex &index) const {
 
 bool ExpenseModel::setData(const QModelIndex &index, const QVariant &value, int role) {
     if (index.isValid() && role == Qt::EditRole) {
-        QList keys = m_expenses.keys();
-        int id = keys[index.row()];
         QString field = Expense::fields.at(index.column());
-        m_expenses[id]->setData(field, value);
-        m_entityManager->update(m_expenses[id]);
+        m_expenses[index.row()]->setData(field, value);
+        m_entityManager->update(m_expenses[index.row()]);
         
         emit dataChanged(index, index, {role});
 
@@ -88,4 +84,33 @@ bool ExpenseModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
 
     return false;
+}
+
+bool ExpenseModel::insertRows(int row, int count, const QModelIndex &parent) {
+    if (row < 0 || row > rowCount() || count <= 0) {
+        return false;
+    }
+
+    beginInsertRows(parent, row, row + count - 1);
+    m_expenses.push_back(nullptr);
+    endInsertRows();
+
+    return true;
+}
+
+void ExpenseModel::addExpense(std::shared_ptr<EntityInterface> entity) {
+    QSqlQuery q;
+    q.prepare("INSERT INTO expense (description, amount) VALUES (:description, :amount) RETURNING id");
+    q.bindValue(":description", entity->getData("description").toString());
+    q.bindValue(":amount", entity->getData("amount").toFloat());
+    q.exec();
+    q.next();
+
+    qDebug() << "Inserted: " << q.value(0).toInt();
+
+    entity->setData("id", q.value(0));
+
+    if (insertRows(rowCount(), 1)) {
+        m_expenses.replace(rowCount() - 1, entity);
+    }
 }

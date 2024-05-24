@@ -30,6 +30,7 @@ private:
     // std::shared_ptr<DAO> m_dao;
     AddExpenseForm *m_addExpenseForm;
     void formatTable(QTableView* tbl);
+    void connectForms();
 
     ExpenseModel* m_expenseModel;
     std::shared_ptr<EntityManager> m_entityManager;
